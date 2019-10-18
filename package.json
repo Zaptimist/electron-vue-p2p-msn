@@ -5,13 +5,28 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "signalhub": "signalhub listen -p 8080",
+    "piet": "npm run electron:serve piet 0 0",
+    "klaas": "npm run electron:serve klaas 950 0",
+    "both": "concurrently --kill-others \"npm run piet\" \"npm run klaas\"",
+    "electron:build": "vue-cli-service electron:build",
+    "electron:serve": "vue-cli-service electron:serve",
+    "postinstall": "electron-builder install-app-deps",
+    "postuninstall": "electron-builder install-app-deps"
   },
+  "main": "background.js",
   "dependencies": {
     "core-js": "^3.1.2",
+    "duplex-json-stream": "^1.0.1",
+    "electron-builder": "^21.2.0",
+    "signalhub": "^4.9.0",
+    "stream-set": "^1.1.0",
     "vue": "^2.6.10",
     "vue-router": "^3.0.6",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "webrtc-swarm": "^2.9.0",
+    "wrtc": "^0.4.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.0.0",
@@ -20,8 +35,14 @@
     "@vue/cli-plugin-vuex": "^4.0.0",
     "@vue/cli-service": "^4.0.0",
     "babel-eslint": "^10.0.1",
+    "concurrency": "^0.1.4",
+    "concurrently": "^5.0.0",
+    "electron": "^5.0.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
+    "sass": "^1.23.0",
+    "sass-loader": "^8.0.0",
+    "vue-cli-plugin-electron-builder": "^1.4.0",
     "vue-template-compiler": "^2.6.10"
   }
 }
