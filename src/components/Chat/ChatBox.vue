@@ -1,23 +1,38 @@
 <template>
   <div class="chatbox">
 
-    <PeerChatBox/>
-    <MyChatBox/>
+    <PeerChatBox :username="username"/>
+    <MyChatBox :username="username"/>
 
   </div>
 
 </template>
 
 <script>
+import { ipcRenderer } from 'electron';
 
 import PeerChatBox from './PeerChatBox';
 import MyChatBox from './MyChatBox';
 
 export default {
+  data(){
+    return{
+      username: ''
+    }
+  },
+  
   components: {
     PeerChatBox,
     MyChatBox
+  },
+
+
+  mounted(){
+    ipcRenderer.on("get:username", (event, username) => {
+      this.username = username;
+    });
   }
+
 };
 </script>
 

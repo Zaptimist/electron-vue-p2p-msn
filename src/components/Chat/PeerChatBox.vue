@@ -4,13 +4,18 @@
       <div class="header">
         <span>
           To:
-          <b>Gurbe</b> &lt;gurbe@hotmail.com&gt;
+          <b>{{username}}</b>
+          &lt;{{username}}@hotmail.com&gt;
         </span>
       </div>
 
       <div class="box">
-        <img src="../../assets/chat/password_message.png" alt="">
+        <img src="../../assets/chat/password_message.png" alt />
         Never give out your password or credit card number in an instant message conversation
+        <br />
+        <span>__________</span>
+
+        <div class="message-list"></div>
       </div>
     </div>
 
@@ -19,14 +24,56 @@
 </template>
 
 <script>
+import { ipcRenderer } from "electron";
+
 import Avatar from "./Avatar";
 import img from "../../assets/chat/avatar.png";
+
+function appendText(data) {
+  const messages = document.querySelector(".message-list");
+
+  const spanAuthor = document.createElement("span");
+  const spanMessage = document.createElement("span");
+
+  spanAuthor.appendChild(document.createTextNode(`${data.username} says:`));
+  spanMessage.appendChild(document.createTextNode(`${data.message}`));
+
+  spanAuthor.style.cssText = `color: #7b7b7b; `;
+  spanMessage.style.cssText = `color: black; margin-left: 10px;`;
+
+  spanAuthor.className = "author";
+  spanMessage.className = "message";
+
+  messages.appendChild(spanAuthor);
+  messages.appendChild(spanMessage);
+}
 
 export default {
   data() {
     return {
       img: img
     };
+  },
+
+  props: {
+    username: String
+  },
+
+  mounted() {
+
+    ipcRenderer.on("send:msg", (e, data) => {
+      var type = data["type"];
+      if (type === "message") {
+        appendText(data);
+      }
+
+      // appendText(data, "blue");
+
+      if (type === "img") {
+        debugger;
+        // appendImg(data);
+      }
+    });
   },
 
   components: {
@@ -62,8 +109,21 @@ export default {
       padding: 5px;
       background: rgb(251, 252, 255);
       text-align: left;
-
     }
+  }
+}
+
+.message-list {
+  display: flex;
+  flex-direction: column;
+
+  .author {
+    color: #7b7b7b;
+    width: 100%;
+  }
+  .message {
+    color: black;
+    margin-left: 10px;
   }
 }
 </style>
