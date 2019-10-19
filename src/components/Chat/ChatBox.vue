@@ -43,7 +43,7 @@ export default {
   flex-direction: column !important; // Used because it overwrites the parent class
   height: 100%;
 
-
+  width: 100%;
   
 }
 </style>
