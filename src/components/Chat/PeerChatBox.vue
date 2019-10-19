@@ -28,6 +28,7 @@ import { ipcRenderer } from "electron";
 
 import Avatar from "./Avatar";
 import img from "../../assets/chat/avatar.png";
+const audio = new Audio(process.env.BASE_URL + "sound.mp3");
 
 function appendText(data) {
   const messages = document.querySelector(".message-list");
@@ -60,14 +61,15 @@ export default {
   },
 
   mounted() {
-
     ipcRenderer.on("send:msg", (e, data) => {
       var type = data["type"];
       if (type === "message") {
         appendText(data);
+        new Notification("Message", {
+          body: data.message
+        });
+        audio.play();
       }
-
-      // appendText(data, "blue");
 
       if (type === "img") {
         debugger;

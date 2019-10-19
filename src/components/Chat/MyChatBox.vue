@@ -19,7 +19,9 @@
         </div>
       </div>
 
-      <div class="footer"></div>
+      <div class="footer">
+        Last message received at .... on 1/1/1970
+      </div>
     </div>
 
     <Avatar :img="img" />
@@ -150,6 +152,8 @@ export default {
     .footer {
       height: 20px;
       border-radius: 0 0 10px 10px;
+      padding-left: 10px;
+      text-align: left;
 
       background-image: linear-gradient(#d4e1ff, #f0f0f8, #d4e1ff);
     }

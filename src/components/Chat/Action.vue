@@ -1,7 +1,7 @@
 <template>
   <div class="action" @click="$emit('clickAction')">
     <img :src="img" alt="image"/>
-    <span>{{text}}</span>
+    <span v-html="text"></span>
   </div>
 </template>
 
@@ -18,13 +18,21 @@
 .action{
   display:flex;
   flex-direction: column;
+  height: 100%;
+  width: 60px;
   justify-content: center;
   align-items: center;
-  padding: 5px;
+  padding: 0 5px;
 
   img{
-    max-width: 32px;
-    height: auto;
+    // width: 32px;
+    // max-height: 32px;
+  }
+
+  span{
+    word-wrap: inherit;
+    // height: 20px;
+    // width: 100%;
   }
 
 }

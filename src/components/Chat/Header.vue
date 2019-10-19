@@ -1,29 +1,22 @@
 <template>
   <div class="header">
     <div class="header__part1">
-
       <div class="header__arrow-button">
         <img src="../../assets/chat/arrows.png" alt />
       </div>
       <div class="header__actions">
-        <Action  text="Invite" :img="ImgInvite"/>
-        <Action text="Invite" :img="ImgSendFiles"/>
-        <Action text="Invite" :img="img"/>
-        <Action text="Invite" :img="img"/>
-        <Action text="Invite" :img="img"/>
-        <Action text="Invite" :img="img"/>
+        <Action class="click-style" text="<u>I</u>nvite" :img="ImgInvite" />
+        <Action class="click-style" text="Send Fi<u>l</u>es" :img="ImgSendFiles" />
+        <Action text="Invite" :img="ImgSendFiles" />
+        <Action text="Invite" :img="ImgSendFiles" />
+        <Action text="Invite" :img="ImgSendFiles" />
+        <Action text="Invite" :img="ImgSendFiles" />
       </div>
     </div>
 
-    <div class="header__part2">
-      asdf
-    </div>
+    <div class="header__part2">asdf</div>
 
-    <div class="header__part3">
-      asdf
-    </div>
-
-
+    <div class="header__part3">asdf</div>
   </div>
 </template>
 
@@ -47,9 +40,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.click-style:hover {
+  transition-duration: 250ms;
+  cursor: pointer;
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0px 0px 0px 1px grey;
+  -moz-box-shadow: inset 0px 0px 0px 1px grey;
+  box-shadow: inset 0px 0px 0px 1px grey;
+  background-color: rgba(255, 255, 255, 0.7)
+}
 
-.test:hover{
-  border: 1px solid black;
+.click-style {
+  transition-duration: 250ms;
 }
 
 .header {
@@ -60,16 +62,18 @@ export default {
   &__part1 {
     display: flex;
 
+    background-image: linear-gradient(#f6f8fd, #bbcdeb, #f6f8fd);
+
     border: 1px solid rgb(179, 186, 202);
     height: 100%;
-    width: 300px;
+    width: 450px;
   }
 
   &__arrow-button {
     width: 30px;
     height: 100%;
 
-    img{
+    img {
       width: 16px;
       padding: 4px;
       border: 1px solid black;
@@ -77,9 +81,8 @@ export default {
     }
   }
 
-  &__actions{
+  &__actions {
     display: flex;
-
   }
 
   &__part2 {

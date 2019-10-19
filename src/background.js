@@ -1,6 +1,11 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, ipcMain } from 'electron'
+import {
+  app,
+  protocol,
+  BrowserWindow,
+  ipcMain
+} from 'electron'
 import {
   createProtocol,
   installVueDevtools
@@ -19,13 +24,25 @@ let y = parseInt(args[2]);
 let win
 
 // Scheme must be registered before the app is ready
-protocol.registerSchemesAsPrivileged([{scheme: 'app', privileges: { secure: true, standard: true } }])
+protocol.registerSchemesAsPrivileged([{
+  scheme: 'app',
+  privileges: {
+    secure: true,
+    standard: true
+  }
+}])
 
-function createWindow () {
+function createWindow() {
   // Create the browser window.
-  win = new BrowserWindow({ x: x, y: y, width: 1500, height: 800, webPreferences: {
-    nodeIntegration: true
-  } })
+  win = new BrowserWindow({
+    x: x,
+    y: y,
+    width: 1500,
+    height: 800,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -72,10 +89,10 @@ app.on('ready', async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
     try {
-  await installVueDevtools()
-} catch (e) {
-  console.error('Vue Devtools failed to install:', e.toString())
-}
+      await installVueDevtools()
+    } catch (e) {
+      console.error('Vue Devtools failed to install:', e.toString())
+    }
 
   }
   createWindow()
@@ -110,6 +127,7 @@ ipcMain.on('send:msg', (e, msg) => {
   console.log('objectToSend', objectToSend);
 
   streams.forEach(peer => {
+    console.log(peer.username);
     peer.write(objectToSend)
   });
 
@@ -117,7 +135,7 @@ ipcMain.on('send:msg', (e, msg) => {
 
 ipcMain.on('img:upload', (e, file) => {
 
-  fs.readFile(file, function(err, buf){
+  fs.readFile(file, function (err, buf) {
 
     var base64 = buf.toString('base64');
 
@@ -155,18 +173,44 @@ var sw = swarm(hub, {
 
 // When a peer disconnects
 sw.on('disconnect', function (peer, id) {
+
+
   console.log('disconnected peer:', id)
   console.log('total peers:', sw.peers.length)
 })
 
 // Assign message when peer connects
 sw.on('peer', function (peer, id) {
+
+  peer.username = 'gekkehenkie'
+
   console.log('Peer connected:', id)
+  console.log('Peer connected:', peer)
   peer = jsonStream(peer);
   streams.add(peer);
+  win.webContents.send('user:online', )
+
+  var user = {
+    type: 'user_online',
+    id: id,
+    username: username,
+    peer: peer
+  }
+
+  streams.forEach(peer => {
+    peer.write(user);
+  })
+
+
 
   // When receiving data
   peer.on('data', data => {
+
+    if(data.type === 'user_online'){
+      return win.webContents.send('user:online', data)
+    }
+
     return win.webContents.send('send:msg', data);
-  })
+  });
+
 })
