@@ -50,9 +50,9 @@ export default {};
 
 <style lang="scss" scoped>
 .chatbox {
-  padding: 12px;
+  padding: 12px 0 12px 12px;
   display: flex;
-  flex-direction: column;
+  flex-direction: column !important; // Used because it overwrites the parent class
   height: 100%;
 
   &__peer-chatbox {

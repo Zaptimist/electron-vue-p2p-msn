@@ -12,10 +12,11 @@
 <style>
 html,
 body {
-  height: calc(100vh - 78px);
+  height: calc(100vh - 90px);
   margin: 0;
   padding: 0;
   background-color: rgb(215, 226, 244);
+  /* overflow: hidden; */
 }
 
 #app {
