@@ -3,7 +3,7 @@
     <Header />
     <div class="chatbox">
       <ChatBox />
-      <AvatarBar />
+      <!-- <AvatarBar /> -->
     </div>
   </div>
 </template>
@@ -12,14 +12,14 @@
 // @ is an alias to /src
 import Header from '../components/Chat/Header'
 import ChatBox from '../components/Chat/ChatBox'
-import AvatarBar from '../components/Chat/AvatarBar'
+// import AvatarBar from '../components/Chat/AvatarBar'
 
 export default {
   name: 'home',
   components: {
     Header,
     ChatBox,
-    AvatarBar
+    // AvatarBar
   }
 }
 
