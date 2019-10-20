@@ -116,20 +116,13 @@ if (isDevelopment) {
 //  IPCRENDERER
 
 // When the send button is pressed it sends the messages to all sockets
-ipcMain.on('send:msg', (e, msg) => {
-
-  let objectToSend = {
-    type: 'message',
-    username: username,
-    message: msg
-  }
-
-  console.log('objectToSend', objectToSend);
+ipcMain.on('send:msg', (e, _msgObject) => {
 
   streams.forEach(peer => {
-    console.log(peer.username);
-    peer.write(objectToSend)
+    peer.write(_msgObject) 
   });
+
+  win.webContents.send('send:msg', _msgObject);
 
 });
 
@@ -139,7 +132,7 @@ ipcMain.on('img:upload', (e, file) => {
 
     var base64 = buf.toString('base64');
 
-    objectToSend = {
+    let objectToSend = {
       type: 'img',
       username: username,
       file: base64
@@ -161,6 +154,7 @@ var swarm = require('webrtc-swarm')
 var signalhub = require('signalhub')
 var streamSet = require('stream-set');
 var jsonStream = require('duplex-json-stream');
+import fs from 'fs';
 
 var streams = streamSet();
 
@@ -171,44 +165,52 @@ var sw = swarm(hub, {
   tcp: true, // use tcp for discovery
 });
 
+let userList = []
+
 // When a peer disconnects
 sw.on('disconnect', function (peer, id) {
 
+  streams.remove(peer);
+
+  const index = userList.findIndex(u => u.id === id);
+  if (index !== undefined) userList.splice(index, 1);
 
   console.log('disconnected peer:', id)
   console.log('total peers:', sw.peers.length)
+
 })
 
 // Assign message when peer connects
 sw.on('peer', function (peer, id) {
 
-  peer.username = 'gekkehenkie'
-
-  console.log('Peer connected:', id)
-  console.log('Peer connected:', peer)
   peer = jsonStream(peer);
   streams.add(peer);
-  win.webContents.send('user:online', )
+
+  userList.push({
+    id: id,
+    username: username
+  })
 
   var user = {
     type: 'user_online',
-    id: id,
     username: username,
-    peer: peer
   }
 
   streams.forEach(peer => {
-    peer.write(user);
+    peer.write(user); 
   })
 
-
+  win.webContents.send('user:online', userList)
 
   // When receiving data
   peer.on('data', data => {
 
-    if(data.type === 'user_online'){
-      return win.webContents.send('user:online', data)
+    if (data.type === 'user_online') {
+      return win.webContents.send('gets:online', data)
     }
+
+    if (data.type === 'img')
+      return win.webContents.send('show:png', data);
 
     return win.webContents.send('send:msg', data);
   });

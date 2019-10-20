@@ -1,38 +1,44 @@
 <template>
   <div class="chatbox">
-
-    <PeerChatBox :username="username"/>
-    <MyChatBox :username="username"/>
-
+    <PeerChatBox :userList="userList" :chatList="chatList" :username="username" />
+    <MyChatBox :chatList="chatList" :username="username" />
   </div>
-
 </template>
 
 <script>
-import { ipcRenderer } from 'electron';
+import { ipcRenderer } from "electron";
 
-import PeerChatBox from './PeerChatBox';
-import MyChatBox from './MyChatBox';
+import PeerChatBox from "./PeerChatBox";
+import MyChatBox from "./MyChatBox";
 
 export default {
-  data(){
-    return{
-      username: ''
-    }
+  data() {
+    return {
+      username: "",
+      userList: [],
+      chatList: []
+    };
   },
-  
+
   components: {
     PeerChatBox,
     MyChatBox
   },
 
-
-  mounted(){
+  mounted() {
     ipcRenderer.on("get:username", (event, username) => {
       this.username = username;
     });
-  }
 
+    ipcRenderer.on("user:online", (event, users) => {
+      this.userList = users;
+    });
+
+    ipcRenderer.on("show:png", (e, _object) => {
+      this.chatList.push(_object);
+    });
+    
+  }
 };
 </script>
 
@@ -44,6 +50,5 @@ export default {
   height: 100%;
 
   width: 100%;
-  
 }
 </style>

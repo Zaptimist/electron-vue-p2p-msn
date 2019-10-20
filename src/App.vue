@@ -16,7 +16,6 @@ body {
   margin: 0;
   padding: 0;
   background-color: rgb(215, 226, 244);
-  /* overflow: hidden; */
 }
 
 #app {

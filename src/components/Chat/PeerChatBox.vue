@@ -4,18 +4,25 @@
       <div class="header">
         <span>
           To:
-          <b>{{username}}</b>
-          &lt;{{username}}@hotmail.com&gt;
+          <div v-for="(u, i) in userList" :key="i">
+            <b>{{u.username}}</b>
+            &lt;{{u.username}}@hotmail.com&gt;
+          </div>
         </span>
       </div>
 
-      <div class="box">
+      <div class="box" ref="okref">
         <img src="../../assets/chat/password_message.png" alt />
         Never give out your password or credit card number in an instant message conversation
         <br />
         <span>__________</span>
 
-        <div class="message-list"></div>
+        <div class="message-list" v-for="(c, i) in chatList" :key="i">
+          <span class="author">{{c.username}} says:</span>
+          <br />
+          <img v-if="c.type === 'img'" :src="'data:img/jpeg;base64,' + c.file" class="message" />
+          <span class="message" v-if="c.type === 'message'">{{c.message}}</span>
+        </div>
       </div>
     </div>
 
@@ -30,25 +37,6 @@ import Avatar from "./Avatar";
 import img from "../../assets/chat/avatar.png";
 const audio = new Audio(process.env.BASE_URL + "sound.mp3");
 
-function appendText(data) {
-  const messages = document.querySelector(".message-list");
-
-  const spanAuthor = document.createElement("span");
-  const spanMessage = document.createElement("span");
-
-  spanAuthor.appendChild(document.createTextNode(`${data.username} says:`));
-  spanMessage.appendChild(document.createTextNode(`${data.message}`));
-
-  spanAuthor.style.cssText = `color: #7b7b7b; `;
-  spanMessage.style.cssText = `color: black; margin-left: 10px;`;
-
-  spanAuthor.className = "author";
-  spanMessage.className = "message";
-
-  messages.appendChild(spanAuthor);
-  messages.appendChild(spanMessage);
-}
-
 export default {
   data() {
     return {
@@ -57,24 +45,29 @@ export default {
   },
 
   props: {
-    username: String
+    username: String,
+    chatList: Array,
+    userList: Array
   },
 
   mounted() {
     ipcRenderer.on("send:msg", (e, data) => {
       var type = data["type"];
+
       if (type === "message") {
-        appendText(data);
-        new Notification("Message", {
-          body: data.message
-        });
-        audio.play();
+        this.chatList.push(data);
+
+        if (data.username !== this.username) audio.play();
       }
 
       if (type === "img") {
+        // this.chatList.push(data);
         debugger;
-        // appendImg(data);
       }
+
+      var container = this.$el.querySelector(".box");
+      console.log(container);
+      container.scrollTop = container.scrollHeight;
     });
   },
 
@@ -96,7 +89,12 @@ export default {
 
     background: rgb(251, 252, 255);
     margin-bottom: 9px;
-    flex: auto;
+
+    width: 100%;
+    height: 98%;
+    display: flex;
+
+    flex-flow: column nowrap;
 
     .header {
       border-bottom: 1px solid rgb(88, 100, 114);
@@ -111,13 +109,14 @@ export default {
       padding: 5px;
       background: rgb(251, 252, 255);
       text-align: left;
+      overflow-y: auto;
     }
   }
 }
 
 .message-list {
-  display: flex;
-  flex-direction: column;
+  // display: flex;
+  // flex-direction: column;
 
   .author {
     color: #7b7b7b;
@@ -126,6 +125,8 @@ export default {
   .message {
     color: black;
     margin-left: 10px;
+    height: auto;
+    max-width: 100px;
   }
 }
 </style>

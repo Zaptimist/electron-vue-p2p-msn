@@ -6,7 +6,12 @@
       </div>
       <div class="header__actions">
         <Action class="click-style" text="<u>I</u>nvite" :img="ImgInvite" />
-        <Action class="click-style" text="Send Fi<u>l</u>es" :img="ImgSendFiles" />
+        <Action
+          @clickAction="sendFiles"
+          class="click-style"
+          text="Send Fi<u>l</u>es"
+          :img="ImgSendFiles"
+        />
         <Action text="Invite" :img="ImgSendFiles" />
         <Action text="Invite" :img="ImgSendFiles" />
         <Action text="Invite" :img="ImgSendFiles" />
@@ -24,6 +29,9 @@
 import Action from "./Action";
 import ImgInvite from "~/assets/chat/invite.png";
 import ImgSendFiles from "~/assets/chat/send_files.png";
+import { ipcRenderer } from "electron";
+
+const { dialog } = require("electron").remote;
 
 export default {
   data() {
@@ -35,6 +43,19 @@ export default {
 
   components: {
     Action
+  },
+
+  methods: {
+    sendFiles() {
+      dialog.showOpenDialog(fileNames => {
+        // fileNames is an array that contains all the selected
+        if (fileNames === undefined || fileNames.length === 0) {
+          return;
+        }
+        let firstFile = fileNames[0];
+        ipcRenderer.send("img:upload", firstFile);
+      });
+    }
   }
 };
 </script>
@@ -47,7 +68,7 @@ export default {
   -webkit-box-shadow: inset 0px 0px 0px 1px grey;
   -moz-box-shadow: inset 0px 0px 0px 1px grey;
   box-shadow: inset 0px 0px 0px 1px grey;
-  background-color: rgba(255, 255, 255, 0.7)
+  background-color: rgba(255, 255, 255, 0.7);
 }
 
 .click-style {

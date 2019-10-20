@@ -19,9 +19,7 @@
         </div>
       </div>
 
-      <div class="footer">
-        Last message received at .... on 1/1/1970
-      </div>
+      <div class="footer">Last message received at .... on 1/1/1970</div>
     </div>
 
     <Avatar :img="img" />
@@ -34,24 +32,6 @@ import { ipcRenderer } from "electron";
 import Avatar from "./Avatar";
 import img from "../../assets/chat/dog.png";
 
-function appendText(data) {
-  const messages = document.querySelector(".message-list");
-
-  const spanAuthor = document.createElement("span");
-  const spanMessage = document.createElement("span");
-
-  spanAuthor.appendChild(document.createTextNode(`${data.username} says:`));
-  spanMessage.appendChild(document.createTextNode(`${data.message}`));
-
-  spanAuthor.style.cssText = `color: #7b7b7b; `;
-  spanMessage.style.cssText = `color: black; margin-left: 10px;`;
-
-  spanAuthor.className = "author";
-  spanMessage.className = "message";
-
-  messages.appendChild(spanAuthor);
-  messages.appendChild(spanMessage);
-}
 
 export default {
   data() {
@@ -61,7 +41,8 @@ export default {
   },
 
   props: {
-    username: String
+    username: String,
+    chatList: Array
   },
 
   components: {
@@ -70,21 +51,22 @@ export default {
 
   methods: {
     submit() {
-
       // Send value
-      let value = this.$refs.message.value
+      let value = this.$refs.message.value;
 
-      ipcRenderer.send("send:msg", value);
+      if(value.length === 0) return;
 
-      let data = {
+      let _msgObject = {
+        type: "message",
         username: this.username,
         message: value
-      }
+      };
 
-      appendText(data)
+      ipcRenderer.send("send:msg", _msgObject);
+      // this.chatList.push(_msgObject);
 
       // Reset value
-      this.$refs.message.value = '';
+      this.$refs.message.value = "";
     }
   }
 };
@@ -111,7 +93,6 @@ export default {
     .box {
       display: flex;
       justify-content: space-between;
-      padding: 6px 6px 6px 10px;
       height: 148px;
 
       background: rgb(251, 252, 255);
@@ -119,12 +100,19 @@ export default {
       border-bottom: 1px solid rgb(88, 100, 114);
 
       .text-input {
+        background-color: #FBFCFF;
+        padding-top: 10px;
+        padding-left: 10px;
         border: none;
         resize: none;
-        height: 100%;
+        outline: none;
         width: 100%;
         margin-right: 10px;
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .text-input::active{
+        border: none;
       }
 
       .buttons {
