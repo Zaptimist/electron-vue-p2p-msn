@@ -7,7 +7,7 @@
 <style>
 html,
 body {
-  height: calc(100vh - 90px);
+  height: 100%;
   margin: 0;
   padding: 0;
   background-color: rgb(215, 226, 244);
