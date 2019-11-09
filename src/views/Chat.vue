@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <Header />
+
     <div class="chatbox">
       <ChatBox />
     </div>
@@ -10,7 +11,7 @@
 </template>
 
 <script>
-// @ is an alias to /src
+
 import Header from "../components/Chat/Header";
 import ChatBox from "../components/Chat/ChatBox";
 import Online from "../components/Chat/Online";

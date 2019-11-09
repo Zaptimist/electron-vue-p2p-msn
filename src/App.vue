@@ -1,10 +1,5 @@
 <template>
   <div id="app">
-    <!-- <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>-->
-
     <router-view />
   </div>
 </template>
@@ -27,7 +22,7 @@ body {
   /* min-height: 100vh; */
   height: 100%;
   font-size: 80%;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;      
 }
 
 #nav {
