@@ -33,7 +33,7 @@ export default {
 }
 
 .chatbox {
-  height: 100%;
+  height: calc(100vh - 90px);
   width: 100%;
   display: flex;
   flex-direction: row;
