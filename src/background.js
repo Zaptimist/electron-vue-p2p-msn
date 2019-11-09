@@ -154,6 +154,24 @@ if (isDevelopment) {
   }
 }
 
+function createChatWindow(){
+  var window = new BrowserWindow({
+    width: 295, // 500
+    height: 558,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  })
+
+  window.loadURL('http://localhost:8080/Chat').then(() => {
+
+  })
+
+  window.on('closed', () => {
+    window = null;
+  })
+}
+
 function createUsersWindow(){
   var window = new BrowserWindow({
     width: 295, // 500
@@ -178,7 +196,10 @@ function createUsersWindow(){
 // UI
 ipcMain.on('show:users', ((e, args) => {
   createUsersWindow()
-  console.log('test');
+}))
+
+ipcMain.on('show:chat', ((e, args) => {
+  createChatWindow()
 }))
 
 

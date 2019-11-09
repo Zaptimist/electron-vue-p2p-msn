@@ -51,7 +51,8 @@
 
           <div class="content">
             <ul>
-              <li>
+              <li >
+                <button @click="openConnection">Test</button>
                 <img src="../assets/addContact.png" />P2P Lobby 1
               </li>
             </ul>
@@ -81,7 +82,32 @@
 </template>
 
 <script>
-export default {};
+import { ipcRenderer } from 'electron';
+export default {
+  methods: {
+    openConnection(e) {
+      e.preventDefault();
+
+      ipcRenderer.send('show:chat')
+      
+    //   alert('asdf');
+    //   // Open chat screen
+    //   var window = new BrowserWindow({
+    //     width: 295, // 500
+    //     height: 558,
+    //     webPreferences: {
+    //       nodeIntegration: true
+    //     }
+    //   });
+
+    //   window.loadURL("http://localhost:8080/Chat").then(() => {});
+
+    //   window.on("closed", () => {
+    //     window = null;
+    //   });
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
