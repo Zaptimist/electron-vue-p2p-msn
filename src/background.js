@@ -38,7 +38,7 @@ protocol.registerSchemesAsPrivileged([{
 // Login
 function createLoginWindow() {
   win = new BrowserWindow({
-    width: 1600, // 500
+    width: 300, // 500
     height: 560,
     webPreferences: {
       nodeIntegration: true

@@ -12,7 +12,18 @@
         </div>
         <div class="personalizeForm">
           <form>
-            <input type="text" placeholder="Dan (Online)" />
+            <!-- <input type="text" placeholder="Dan" />
+            <select class="selectOption">
+              <option>stront</option>
+            </select> -->
+            <label>
+              <span id="profileName">Andries</span>
+              <select>
+                <option>Online</option>
+                <option>Away</option>
+                <option>Busy</option>
+              </select>
+            </label>
             <input type="text" placeholder="<Type a personal message>" />
           </form>
           <div class="mailMsn">
@@ -20,7 +31,7 @@
               <li>
                 <img src="../assets/mail.png" />(0)
               </li>
-              <li>
+              <li id="msntoday">
                 <img src="../assets/smallmsn.png" />MSN Today
               </li>
             </ul>
@@ -53,7 +64,7 @@
             <ul>
               <li >
                 <button @click="openConnection">Test</button>
-                <img src="../assets/addContact.png" />P2P Lobby 1
+                <img src="../assets/onlineContact.png" />P2P Lobby 1
               </li>
             </ul>
           </div>
@@ -113,6 +124,7 @@ export default {
 <style lang="scss" scoped>
 #users {
   height: 100%;
+  overflow: hidden;
 }
 .upper {
   // border: 1px solid red;
@@ -160,6 +172,19 @@ export default {
     height: 100%;
     font-size: 10px;
 
+    #profileName {
+      font-size: 15px;
+      font-weight: 500;
+    }
+    
+    select {border: none; background: none; color: #666; font-size: 12px;}
+    select:focus {
+      border:none;
+      background: transparent;
+    }
+
+    option { background: none; }
+
     form {
       input {
         border: none;
@@ -168,6 +193,10 @@ export default {
         font-family: Verdana, Geneva, Tahoma, sans-serif;
         width: 100%;
         margin-top: 5px;
+
+      }
+      input:hover {
+        cursor: text;
       }
     }
   }
@@ -185,6 +214,10 @@ export default {
 
       li {
         display: inline-flex;
+      }
+
+      #msntoday {
+        margin-left: 20px;
       }
     }
   }
@@ -253,12 +286,17 @@ ul {
   }
 
   .contactList {
-    border: 1px solid red;
+    border-top: 1px solid lightgrey;
     height: 70%;
+
+    #test1 {
+      height: 20px;
+      width: auto;
+      background-color: red;
+    }
   }
 
   .ad {
-    border: 1px solid fuchsia;
     height: 16%;
   }
 }
@@ -281,18 +319,19 @@ ul {
     position: relative; /* ADDING THIS IS REQUIRED */
 
     p {
-      margin: 0;
+      margin-left: 10px;
       display: inline;
       font-size: 12px;
+      font-weight: 600;
     }
   }
 
   label::before {
-    content: "+";
+    content: url('../assets/plus.png');
   }
 
   input:checked + label::before {
-    content: "-";
+    content: url('../assets/minus.png')
   }
 
   input + label + .content {
