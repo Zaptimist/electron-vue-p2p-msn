@@ -1,5 +1,8 @@
 'use strict'
 
+const url = require('url');
+const path = require('path');
+
 import {
   app,
   protocol,
@@ -31,6 +34,41 @@ protocol.registerSchemesAsPrivileged([{
     standard: true
   }
 }])
+
+// Login
+function createLoginWindow() {
+  win = new BrowserWindow({
+    width: 1600, // 500
+    height: 560,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  })
+
+  if (process.env.WEBPACK_DEV_SERVER_URL) {
+    // Load the url of the dev server if in development mode
+    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL).then(() => {
+      console.log('sending', username);
+      win.webContents.send('get:username', username);
+    })
+    if (!process.env.IS_TEST) win.webContents.openDevTools()
+  } else {
+    createProtocol('app')
+    // Load the index.html when not in development
+    win.loadURL('app://./index.html').then(() => {
+      console.log('sending', username);
+      win.webContents.send('show:username', username);
+    })
+  }
+
+  win.on('closed', () => {
+    //dereference window object, usually you would store windows
+    // in an array if your app supports multi windows, this is the time
+    // when you should delete the corresponding element.
+    win = null;
+  })
+}
+
 
 function createWindow() {
   // Create the browser window.
@@ -95,7 +133,10 @@ app.on('ready', async () => {
     }
 
   }
-  createWindow()
+
+  // Login
+  createLoginWindow();
+  // createWindow()
 })
 
 // Exit cleanly on request from parent process in development mode.
@@ -113,13 +154,42 @@ if (isDevelopment) {
   }
 }
 
+function createUsersWindow(){
+  var window = new BrowserWindow({
+    width: 295, // 500
+    height: 558,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  })
+
+  window.loadURL('http://localhost:8080/Users').then(() => {
+
+  })
+
+  window.on('closed', () => {
+    window = null;
+  })
+}
+
+
 //  IPCRENDERER
+
+// UI
+ipcMain.on('show:users', ((e, args) => {
+  createUsersWindow()
+  console.log('test');
+}))
+
+
+
+// Connection
 
 // When the send button is pressed it sends the messages to all sockets
 ipcMain.on('send:msg', (e, _msgObject) => {
 
   streams.forEach(peer => {
-    peer.write(_msgObject) 
+    peer.write(_msgObject)
   });
 
   win.webContents.send('send:msg', _msgObject);
@@ -197,7 +267,7 @@ sw.on('peer', function (peer, id) {
   }
 
   streams.forEach(peer => {
-    peer.write(user); 
+    peer.write(user);
   })
 
   win.webContents.send('user:online', userList)

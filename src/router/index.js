@@ -6,6 +6,16 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
+    name: 'Login',
+    component: () => import('../pages/Login.vue')
+  },
+  {
+    path: '/Users',
+    name: 'Users',
+    component: () => import('../pages/Users.vue')
+  },
+  {
+    path: '/Chat',
     name: 'Chat',
     component: () => import('../views/Chat.vue')
   }
