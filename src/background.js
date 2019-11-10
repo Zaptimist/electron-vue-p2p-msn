@@ -47,8 +47,8 @@ async function main() {
   }
 
   loginWindow = new BrowserWindow({
-    width: 800,
-    height: 500,
+    width: 350,
+    height: 600,
     webPreferences: {
       nodeIntegration: true
     }
@@ -76,7 +76,6 @@ var swarm = require('webrtc-swarm')
 var signalhub = require('signalhub');
 var streamSet = require('stream-set');
 var jsonStream = require('duplex-json-stream');
-import fs from 'fs';
 
 var streams = streamSet();
 let userList = [];
@@ -90,8 +89,10 @@ ipcMain.on('sign:in', (async (e, args) => {
     .then((connectionState) => {
 
       // If not connected go back to login state
-      if(!connectionState)
-        return;
+      if(!connectionState){
+        return loginWindow.webContents.send('fail:signalhub');
+      }
+
 
       // Go to lobby screen
       createLobbyWindow();

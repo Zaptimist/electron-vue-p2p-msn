@@ -9,14 +9,14 @@
         <img src="../assets/profilepicture.png" />
       </div>
       <div class="signInForm">
-        <div id="animation">
+        <div v-if="isLogginIn" id="animation">
           <p>Signing In...</p>
           <img id="signInAnimation" src="../assets/animation.gif" />
           <div class="btnCancel">
-            <button class="btn" id="cancelBtn">Cancel</button>
+            <button @click="cancel" class="btn" id="cancelBtn">Cancel</button>
           </div>
         </div>
-        <form id="form">
+        <form v-if="!isLogginIn" id="form">
           <label for="email">E-mail address:</label>
           <input id="email" name="email" type="text" />
           <br />
@@ -85,15 +85,31 @@
 </template>
 
 <script>
-// import '../mixins/login'
 import { ipcRenderer } from "electron";
 
 export default {
+
+  data() {
+    return{
+      isLogginIn: false
+    }
+  },
+
+  mounted(){
+    ipcRenderer.on("fail:signalhub", () => {
+      this.isLogginIn = false;
+    });
+  },
+
   methods: {
     signIn(e) {
       e.preventDefault();
-      ipcRenderer.send('show:users');
-  
+      this.isLogginIn = true;
+      ipcRenderer.send('sign:in');
+    },
+    cancel(e){
+      e.preventDefault();
+      this.isLogginIn = false;
     }
   }
 };
@@ -135,6 +151,10 @@ $font-color: #000075;
   }
 }
 
+.hideForm{
+  display: none;
+}
+
 .signInForm {
   font-size: 11px;
   display: flex;
@@ -142,7 +162,7 @@ $font-color: #000075;
   margin-top: 5%;
   color: $font-color;
 
-  #animation {
+  .animation {
     text-align: center;
     display: none;
   }
