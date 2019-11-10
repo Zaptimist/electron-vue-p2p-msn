@@ -104,7 +104,7 @@ ipcMain.on('sign:in', (async (e, args) => {
 function initializeSwarm(hub){
   var sw = swarm(hub, {
     wrtc: require('wrtc'),  // node-webrtc for node js native addons like electron
-    utp: false,              // disable utp for discovery
+    utp: false,             // disable utp for discovery
     tcp: true,              // use tcp for discovery
   });
 
@@ -115,18 +115,17 @@ function initializeSwarm(hub){
     peer = jsonStream(peer);
     streams.add(peer);
 
-    console.log('🍅 peer', peer);
+    // console.log('🍅 peer', peer);
     console.log('🎂 id', id);
 
     userList.push({
       id: id,
-      username: username
+      // username: username
     });
 
     var user = {
       type: 'user_online',
-      username: username,
-      id, id
+      // username: username,
     }
 
     streams.forEach(peer => {
