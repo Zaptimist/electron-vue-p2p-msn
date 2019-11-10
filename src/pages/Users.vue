@@ -51,7 +51,7 @@
 
           <div class="content">
             <ul>
-              <li >
+              <li>
                 <button @click="openConnection">Test</button>
                 <img src="../assets/addContact.png" />P2P Lobby 1
               </li>
@@ -82,29 +82,19 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron';
+import { ipcRenderer } from "electron";
 export default {
+  mounted() {
+    // FEATURE: creates a list of all the peers in the users lobby
+    ipcRenderer.on("user:online", (event, users) => {
+      this.userList = users;
+    });
+  },
+
   methods: {
     openConnection(e) {
       e.preventDefault();
-
-      ipcRenderer.send('show:chat')
-      
-    //   alert('asdf');
-    //   // Open chat screen
-    //   var window = new BrowserWindow({
-    //     width: 295, // 500
-    //     height: 558,
-    //     webPreferences: {
-    //       nodeIntegration: true
-    //     }
-    //   });
-
-    //   window.loadURL("http://localhost:8080/Chat").then(() => {});
-
-    //   window.on("closed", () => {
-    //     window = null;
-    //   });
+      ipcRenderer.send("show:chat");
     }
   }
 };

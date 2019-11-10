@@ -30,9 +30,11 @@ export default {
       this.username = username;
     });
 
-    ipcRenderer.on("user:online", (event, users) => {
-      this.userList = users;
-    });
+    // FIXME: Show which user joins the chat
+    // ipcRenderer.on("user:online", (event, users) => {
+    //   console.log('user logged in', users);
+    //   this.userList = users;
+    // });
 
     ipcRenderer.on("show:png", (e, _object) => {
       this.chatList.push(_object);

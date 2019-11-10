@@ -18,7 +18,7 @@
         </div>
         <form v-if="!isLogginIn" id="form">
           <label for="email">E-mail address:</label>
-          <input id="email" name="email" type="text" />
+          <input v-model="email" id="email" name="email" type="text" />
           <br />
           <label for="pwd">Password:</label>
           <input id="pwd" name="pwd" type="password" />
@@ -88,14 +88,14 @@
 import { ipcRenderer } from "electron";
 
 export default {
-
   data() {
-    return{
-      isLogginIn: false
-    }
+    return {
+      isLogginIn: false,
+      email: ""
+    };
   },
 
-  mounted(){
+  mounted() {
     ipcRenderer.on("fail:signalhub", () => {
       this.isLogginIn = false;
     });
@@ -104,10 +104,13 @@ export default {
   methods: {
     signIn(e) {
       e.preventDefault();
+      let email = this.email.trim();
+      if (email.length === 0) return;
+
       this.isLogginIn = true;
-      ipcRenderer.send('sign:in');
+      ipcRenderer.send("sign:in");
     },
-    cancel(e){
+    cancel(e) {
       e.preventDefault();
       this.isLogginIn = false;
     }
@@ -151,7 +154,7 @@ $font-color: #000075;
   }
 }
 
-.hideForm{
+.hideForm {
   display: none;
 }
 
